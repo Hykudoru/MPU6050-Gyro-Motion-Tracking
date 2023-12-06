@@ -12,8 +12,8 @@
 
 WebServer server(80);
 WebSocketsServer webSocket = WebSocketsServer(81);
-const char* SSID = "07410202";
-const char* PASSWORD = "ekvnrqqE8hDy";
+const char* SSID = "Hykudo";
+const char* password[] = {"299792458", "Proverbs28:5"};
 // const char* SELF_SSID = "ESP32 AP";
 // const char* SELF_PASS = "299792458";
 StaticJsonDocument<512> outgoing; 
@@ -87,12 +87,20 @@ public:
   {
     clear();
     WiFi.mode(WIFI_AP_STA);
-    //WiFi.softAP(SELF_SSID, SELF_PASS);
-    WiFi.begin(SSID, PASSWORD);
+    int i = 0;
     while(WiFi.status() != WL_CONNECTED)
     { 
-      delay(1000);
-      debug("Attempting to connect to wifi...");
+      clear();
+      if (i < sizeof(password)/sizeof(char*)) 
+      {
+        debug("Attempting to connect to wifi...");
+        WiFi.begin(SSID, password[i++]);
+        delay(1000);
+      }
+      else {
+        debug("Couldn't connect to wifi.");
+        i = 0;
+      }
     }
     debug("Connected.");
     delay(1000);
